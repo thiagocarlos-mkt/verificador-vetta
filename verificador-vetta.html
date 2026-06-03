@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificador Oficial — Escola Vetta</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #F5E9C8;
+    --gold-dark: #8A6A1F;
+    --navy: #0D1B2A;
+    --navy-mid: #1C3048;
+    --navy-light: #2A4560;
+    --white: #FAFAF8;
+    --green: #1A6B3A;
+    --green-light: #E6F5EC;
+    --green-bright: #22A55A;
+    --red: #8B1C1C;
+    --red-light: #FCEBEB;
+    --red-bright: #D93025;
+    --text-muted: #8A9BAD;
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 20px 60px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 50% at 100% 100%, rgba(201,168,76,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.35);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 5vw, 36px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .headline span {
+    color: var(--gold);
+  }
+
+  .photo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 22px 0 18px;
+  }
+
+  .photo-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    background: var(--navy-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .photo-circle:last-child {
+    margin-left: -18px;
+  }
+
+  .divider-gold {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 18px auto;
+  }
+
+  .subtext {
+    color: #B8C9D9;
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  /* CARD */
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 18px;
+    padding: 32px 36px;
+    backdrop-filter: blur(8px);
+  }
+
+  .card-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .input-wrap {
+    position: relative;
+    margin-bottom: 18px;
+  }
+
+  .phone-input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(201,168,76,0.3);
+    border-radius: var(--radius);
+    padding: 14px 18px 14px 52px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    letter-spacing: 0.04em;
+  }
+
+  .phone-input::placeholder { color: rgba(255,255,255,0.3); font-weight: 400; }
+
+  .phone-input:focus {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.07);
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--gold);
+    opacity: 0.75;
+  }
+
+  .btn-verify {
+    width: 100%;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: var(--radius);
+    padding: 15px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-verify:hover { background: #DDB85A; }
+  .btn-verify:active { transform: scale(0.98); }
+
+  .btn-icon { font-size: 18px; }
+
+  /* RESULT PANELS */
+  .result {
+    display: none;
+    border-radius: 16px;
+    padding: 28px 30px;
+    margin-top: 22px;
+    animation: slideIn 0.35s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .result.success {
+    background: var(--green-light);
+    border: 1.5px solid #78C99A;
+  }
+
+  .result.error {
+    background: #FFF0F0;
+    border: 1.5px solid #F09595;
+  }
+
+  .result-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    display: block;
+    text-align: center;
+  }
+
+  .result-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .result.success .result-title { color: var(--green); }
+  .result.error .result-title   { color: var(--red); }
+
+  .result-body {
+    font-size: 14.5px;
+    line-height: 1.65;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .result.success .result-body { color: #1A4A2A; }
+  .result.error .result-body   { color: #5A1A1A; }
+
+  .warnings {
+    background: rgba(209,36,36,0.07);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+  }
+
+  .warning-item {
+    font-size: 13.5px;
+    color: #6B1515;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .warning-item:last-child { margin-bottom: 0; }
+
+  .warning-x { color: var(--red-bright); font-weight: 700; flex-shrink: 0; }
+
+  .btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 13px 20px;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: filter 0.2s, transform 0.1s;
+    text-decoration: none;
+  }
+
+  .btn-action:active { transform: scale(0.98); }
+  .btn-action:hover { filter: brightness(0.93); }
+
+  .btn-success-action {
+    background: var(--green-bright);
+    color: #fff;
+  }
+
+  .btn-danger-action {
+    background: var(--red-bright);
+    color: #fff;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    margin-top: 30px;
+    color: rgba(255,255,255,0.25);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .footer strong { color: rgba(255,255,255,0.4); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="badge">🔒 Ferramenta Oficial</div>
+    <h1 class="headline">Verificador Oficial da<br><span>Escola Vetta</span></h1>
+
+    <div class="photo-row">
+      <div class="photo-circle">LJ</div>
+      <div class="photo-circle">SA</div>
+    </div>
+
+    <div class="divider-gold"></div>
+
+    <p class="subtext">
+      Para evitar golpes, fraudes ou perfis falsos que se passam pela nossa equipe, use esta ferramenta para checar se o número de WhatsApp que entrou em contato com você é realmente da equipe do Luiz Jr.
+    </p>
+  </div>
+
+  <div class="card">
+    <p class="card-label">Digite o número com DDD</p>
+
+    <div class="input-wrap">
+      <span class="input-icon">📱</span>
+      <input
+        class="phone-input"
+        type="tel"
+        id="phoneInput"
+        placeholder="Ex: 61 99801-5744"
+        maxlength="20"
+      >
+    </div>
+
+    <button class="btn-verify" onclick="verificar()">
+      <span class="btn-icon">🔍</span>
+      VERIFICAR O NÚMERO
+    </button>
+
+    <!-- RESULTADO: VERIFICADO -->
+    <div class="result success" id="resultSuccess">
+      <span class="result-icon">✅</span>
+      <h2 class="result-title">NÚMERO VERIFICADO E SEGURO!</h2>
+      <p class="result-body">
+        Pode confiar! Este número pertence à equipe oficial do Luiz Jr e da Escola Vetta.<br><br>
+        Fique totalmente segura para dar continuidade ao seu atendimento, tirar suas dúvidas ou realizar sua inscrição. Estamos aqui para te ajudar!
+      </p>
+      <a class="btn-action btn-success-action" href="https://wa.me/556199801574" target="_blank" rel="noopener">
+        💬 CONTINUAR O CONTATO
+      </a>
+    </div>
+
+    <!-- RESULTADO: NÃO OFICIAL -->
+    <div class="result error" id="resultError">
+      <span class="result-icon">⚠️</span>
+      <h2 class="result-title">ATENÇÃO: NÚMERO NÃO OFICIAL!</h2>
+      <p class="result-body">
+        Cuidado! Este número <strong>NÃO pertence à Escola Vetta</strong> e não faz parte da nossa equipe de lançamentos ou suporte. Trata-se de um golpista.
+      </p>
+
+      <div class="warnings">
+        <div class="warning-item"><span class="warning-x">✗</span> Não confie neste número.</div>
+        <div class="warning-item"><span class="warning-x">✗</span> Não envie dados pessoais, senhas ou comprovantes.</div>
+        <div class="warning-item"><span class="warning-x">✗</span> Não faça pagamentos ou transferências solicitadas por este contato.</div>
+      </div>
+
+      <p class="result-body" style="font-size:13.5px; margin-bottom:16px;">
+        Se você suspeita de fraude, tire um print da conversa e denuncie imediatamente para o nosso suporte oficial através dos nossos canais validados.
+      </p>
+
+      <a class="btn-action btn-danger-action" href="https://wa.me/556199801574" target="_blank" rel="noopener">
+        🚨 QUERO DENUNCIAR O GOLPE
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <strong>Escola Vetta — Luiz Jr</strong><br>
+    Esta ferramenta é exclusiva para verificação de segurança.<br>
+    Em caso de dúvidas, acesse apenas nossos canais oficiais.
+  </div>
+
+</div>
+
+<script>
+  const NUMEROS_VALIDOS = [
+    "556199801574",   // +55 61 99801-5744 → sem +, espaço, traço
+    // aguardando: o número tem 11 dígitos (061 + 9 dígitos) → 556199801574 (sem o último 4?)
+    // corrigindo conforme lista original:
+  ];
+
+  // Lista completa normalizada (só dígitos, sem +55 ou com +55)
+  const LISTA = [
+    // Formato: todos os dígitos após o +
+    "5561998015744",
+    "5511914275488",
+    "5561982175510",
+    "5561982172306",
+    "5561982175324",
+    "5531991213567",
+    "5531993524080",
+  ];
+
+  function normalizar(num) {
+    // Remove tudo que não é dígito
+    let d = num.replace(/\D/g, '');
+    // Se começar com 55 e tiver mais de 11 dígitos, mantém como está
+    // Se tiver 10 ou 11 dígitos (sem código do país), adiciona 55
+    if (d.length <= 11) d = '55' + d;
+    // Remove zeros extras de discagem (ex: 0055...)
+    d = d.replace(/^0+/, '');
+    if (!d.startsWith('55')) d = '55' + d;
+    return d;
+  }
+
+  function verificar() {
+    const raw = document.getElementById('phoneInput').value.trim();
+    if (!raw) {
+      document.getElementById('phoneInput').focus();
+      return;
+    }
+
+    const normalizado = normalizar(raw);
+    const valido = LISTA.some(n => normalizar(n) === normalizado || n === normalizado);
+
+    const elSuccess = document.getElementById('resultSuccess');
+    const elError   = document.getElementById('resultError');
+
+    elSuccess.style.display = 'none';
+    elError.style.display   = 'none';
+
+    if (valido) {
+      elSuccess.style.display = 'block';
+      elSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      elError.style.display = 'block';
+      elError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  // Permite verificar com Enter
+  document.getElementById('phoneInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') verificar();
+  });
+</script>
+</body>
+</html>
